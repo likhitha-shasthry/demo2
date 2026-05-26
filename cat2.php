@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $_SESSION['cat2'] = [
+        'fdp_workshop' => $_POST['fdp_workshop'],
+        'mooc_courses' => $_POST['mooc_courses'],
+        'portfolio_event' => $_POST['portfolio_event'],
+        'seminar_conference' => $_POST['seminar_conference'],
+        'university_academic' => $_POST['university_academic']
+    ];
+
+    header("Location: cat3.php"); // or next page
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,30 +33,30 @@
     </section>
 
     <section class="page-body">
-      <form class="portal-form category-form" id="category2-form">
+      <form class="portal-form category-form" id="category2-form" method="POST">
         <div class="input-group">
           <label for="c2-fdp-workshop">FDP / Workshop</label>
-          <input id="c2-fdp-workshop" type="number" min="0" step="1" required placeholder="0" />
+          <input id="c2-fdp-workshop"name="fdp_workshop" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-mooc-courses">MOOC Courses</label>
-          <input id="c2-mooc-courses" type="number" min="0" step="1" required placeholder="0" />
+          <input id="c2-mooc-courses" name="mooc_courses"type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-portfolio-event">Portfolio / Event Coordination</label>
-          <input id="c2-portfolio-event" type="number" min="0" step="1" required placeholder="0" />
+          <input id="c2-portfolio-event"name="portfolio_event" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-seminar-conference">Seminar / Webinar / Conferences</label>
-          <input id="c2-seminar-conference" type="number" min="0" step="1" required placeholder="0" />
+          <input id="c2-seminar-conference"name="seminar_conference" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-university-academic">University Academic Work</label>
-          <input id="c2-university-academic" type="number" min="0" step="1" required placeholder="0" />
+          <input id="c2-university-academic"name="university_academic" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="upload-section">
