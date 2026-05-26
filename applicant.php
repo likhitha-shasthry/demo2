@@ -33,6 +33,7 @@ if(isset($_POST['submit']))
      '$branch','$board','$year','$class','$percentage','$role')";
 
     mysqli_query($conn, $sql) or die(mysqli_error($conn));
+    $_SESSION['applicant_id'] = mysqli_insert_id($conn);
 
   echo "<script>
 alert('Application submitted successfully');
