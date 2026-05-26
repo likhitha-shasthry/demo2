@@ -1,0 +1,270 @@
+:root {
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #212121;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page-shell {
+  width: min(900px, 95%);
+  margin: 32px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: #555;
+}
+
+.page-body {
+  margin-top: 24px;
+}
+
+.submission-container {
+  display: grid;
+  gap: 24px;
+}
+
+/* Category Summary Styles */
+.category-summary {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: #ffffff;
+}
+
+.category-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.btn-edit-cat {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-edit-cat:hover {
+  background: #bfdbfe;
+}
+
+.category-content {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.summary-item {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 16px;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border-left: 4px solid #2563eb;
+}
+
+.summary-item label {
+  font-weight: 600;
+  color: #334155;
+}
+
+.display-text {
+  margin: 0;
+  color: #475569;
+  word-break: break-word;
+  line-height: 1.5;
+  padding: 8px;
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+/* Download Section */
+.download-section {
+  padding: 20px;
+  background: #ecfdf5;
+  border: 2px solid #86efac;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.download-section h3 {
+  margin: 0 0 12px;
+  color: #047857;
+}
+
+.btn-download {
+  background: #10b981;
+  color: #ffffff;
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.btn-download:hover {
+  background: #059669;
+}
+
+/* Confirmation Section */
+.confirmation-section {
+  padding: 20px;
+  background: #fef3c7;
+  border: 2px solid #fcd34d;
+  border-radius: 10px;
+}
+
+.confirmation-section h3 {
+  margin: 0 0 16px;
+  color: #b45309;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.checkbox-group:last-child {
+  margin-bottom: 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.checkbox-group label {
+  flex: 1;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Button Row */
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-back {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.btn-back:hover {
+  background: #e2e8f0;
+}
+
+.btn-submit {
+  background: #10b981;
+  color: #ffffff;
+  flex: 1;
+  min-width: 200px;
+  font-size: 1rem;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #059669;
+}
+
+.btn-submit:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Submission Status */
+.submission-status {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  min-height: 40px;
+  display: none;
+  font-weight: 600;
+}
+
+.submission-status.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  display: block;
+}
+
+.submission-status.error {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border: 1px solid #fca5a5;
+  display: block;
+}
+
+.submission-status.loading {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-item {
+    grid-template-columns: 1fr;
+  }
+
+  .category-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .btn-submit {
+    flex: none;
+  }
+}
