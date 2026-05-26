@@ -1,0 +1,71 @@
+/*
+  ============================================================
+  SHARED THEME — Faculty Appraisal Portal
+  ============================================================
+  Include this file (or copy the :root block) into every page
+  so all CSS variables are available everywhere.
+
+  File load order suggestion:
+    1. theme-variables.css   ← this file (shared tokens)
+    2. styles.css            ← login page
+    3. admin.css / cat1.css / cat2.css / cat3.css / final.css / admin-review.css
+  ============================================================
+*/
+
+/* Google Fonts — add this <link> to every HTML <head>:
+   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+*/
+
+:root {
+  /* ── Typography ── */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* ── Palette ── */
+  --color-bg:           #f5f8ff;          /* page background */
+  --color-surface:      #ffffff;          /* cards, panels */
+  --color-surface-alt:  #f0f4fb;          /* subtle inset areas */
+  --color-border:       #dde3ef;          /* all borders */
+  --color-border-focus: #1e3a8a;          /* input focus ring */
+
+  --color-text:         #0f172a;          /* primary text */
+  --color-text-muted:   #475569;          /* secondary text */
+  --color-text-faint:   #94a3b8;          /* placeholder / hints */
+
+  /* ── Brand colors ── */
+  --color-primary:      #1e3a8a;          /* deep navy – buttons, headers */
+  --color-primary-hover:#1e40af;
+  --color-primary-light:#dbeafe;          /* tint / ghost */
+
+  --color-accent:       #d97706;          /* amber – highlights, badges */
+  --color-accent-hover: #b45309;
+
+  --color-success:      #059669;
+  --color-success-bg:   #d1fae5;
+  --color-success-text: #065f46;
+
+  --color-error:        #dc2626;
+  --color-error-bg:     #fee2e2;
+  --color-error-text:   #7f1d1d;
+
+  --color-info-bg:      #dbeafe;
+  --color-info-text:    #1e40af;
+
+  /* ── Upload / dashed input ── */
+  --color-upload-border: #cbd5e1;
+
+  /* ── Radius ── */
+  --radius-xs:  6px;
+  --radius-sm:  10px;
+  --radius:     14px;
+  --radius-lg:  20px;
+  --radius-xl:  24px;
+
+  /* ── Shadows ── */
+  --shadow-sm:  0 2px 8px rgba(15,23,42,.06);
+  --shadow:     0 6px 20px rgba(15,23,42,.08);
+  --shadow-lg:  0 16px 48px rgba(15,23,42,.12);
+
+  /* ── Transitions ── */
+  --transition: 0.2s ease;
+}
