@@ -19,32 +19,39 @@
       <form class="portal-form category-form" id="category2-form">
         <div class="input-group">
           <label for="c2-fdp-workshop">FDP / Workshop</label>
-          <input id="c2-fdp-workshop" type="number" min="0" step="1" required
-            placeholder="0" />
+          <input id="c2-fdp-workshop" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-mooc-courses">MOOC Courses</label>
-          <input id="c2-mooc-courses" type="number" min="0" step="1" required
-            placeholder="0" />
+          <input id="c2-mooc-courses" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-portfolio-event">Portfolio / Event Coordination</label>
-          <input id="c2-portfolio-event" type="number" min="0" step="1" required
-            placeholder="0" />
+          <input id="c2-portfolio-event" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-seminar-conference">Seminar / Webinar / Conferences</label>
-          <input id="c2-seminar-conference" type="number" min="0" step="1" required
-            placeholder="0" />
+          <input id="c2-seminar-conference" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
         <div class="input-group">
           <label for="c2-university-academic">University Academic Work</label>
-          <input id="c2-university-academic" type="number" min="0" step="1" required
-            placeholder="0" />
+          <input id="c2-university-academic" type="number" min="0" step="1" required placeholder="0" />
+        </div>
+
+        <div class="upload-section">
+          <h3>Upload Supporting Documents</h3>
+         
+          
+          <div class="upload-group">
+            <label for="c2-documents">Select Files</label>
+            <input id="c2-documents" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+            <button type="button" class="btn btn-upload" id="upload-to-drive">Upload</button>
+            <div id="upload-status" class="upload-status"></div>
+          </div>
         </div>
 
         <div class="button-row">
@@ -54,6 +61,8 @@
       </form>
     </section>
   </main>
+
+
 </body>
 
 </html>

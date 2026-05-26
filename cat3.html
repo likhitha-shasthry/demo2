@@ -72,6 +72,17 @@
           <input id="c3-copyright" type="number" min="0" step="1" required placeholder="0" />
         </div>
 
+        <div class="upload-section">
+          <h3>Upload Supporting Documents</h3>
+          
+          <div class="upload-group">
+            <label for="c3-documents">Select Files</label>
+            <input id="c3-documents" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+            <button type="button" class="btn btn-upload" id="upload-to-drive">Upload</button>
+            <div id="upload-status" class="upload-status"></div>
+          </div>
+        </div>
+
         <div class="button-row">
           <button type="button" class="btn btn-edit">Edit</button>
           <button type="submit" class="btn btn-submit">Save and Next</button>
@@ -79,6 +90,7 @@
       </form>
     </section>
   </main>
+
 </body>
 
 </html>
