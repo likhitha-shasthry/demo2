@@ -120,19 +120,62 @@ function renderMetricsList(containerId, breakdown, catColor) {
 }
 
 function updateTotals() {
-  const cat1Val = parseInt(document.getElementById('cat1-input').value) || 0;
-  const cat2Score = parseInt(document.getElementById('cat2-score').dataset.score) || 0;
-  const cat3Score = parseInt(document.getElementById('cat3-score').dataset.score) || 0;
 
-  const total = cat1Val + cat2Score + cat3Score;
+  const studentMarks =
+    parseInt(
+      document.getElementById('cat1-studentMarks').value
+    ) || 0;
 
-  document.getElementById('sum-cat1').textContent  = `${cat1Val} / 20`;
-  document.getElementById('sum-cat2').textContent  = `${cat2Score} / 30`;
-  document.getElementById('sum-cat3').textContent  = `${cat3Score} / 50`;
-  document.getElementById('sum-total').textContent = `${total} / 100`;
-  document.getElementById('totalScore').textContent = total;
+  const ictMarks =
+    parseInt(
+      document.getElementById('cat1-ictMarks').value
+    ) || 0;
+
+  const bestPracticeMarks =
+    parseInt(
+      document.getElementById('cat1-bestPracticeMarks').value
+    ) || 0;
+
+  const cat1Val =
+    studentMarks +
+    ictMarks +
+    bestPracticeMarks;
+
+  const cat2Score =
+    parseInt(
+      document.getElementById('cat2-score').dataset.score
+    ) || 0;
+
+  const cat3Score =
+    parseInt(
+      document.getElementById('cat3-score').dataset.score
+    ) || 0;
+
+  const total =
+    cat1Val +
+    cat2Score +
+    cat3Score;
+
+  document.getElementById(
+    'sum-cat1'
+  ).textContent = `${cat1Val} / 20`;
+
+  document.getElementById(
+    'sum-cat2'
+  ).textContent = `${cat2Score} / 30`;
+
+  document.getElementById(
+    'sum-cat3'
+  ).textContent = `${cat3Score} / 50`;
+
+  document.getElementById(
+    'sum-total'
+  ).textContent = `${total} / 100`;
+
+  document.getElementById(
+    'totalScore'
+  ).textContent = total;
 }
-
 /* ─────────────────────────────────────────────────────────────
    5.  INIT
 ───────────────────────────────────────────────────────────── */
@@ -160,26 +203,43 @@ function init() {
   document.getElementById('cat1-ictTools').textContent       = c1.ictTools;
   document.getElementById('cat1-bestPractice').textContent   = c1.bestPractice;
 
-  /* ── Category 1: marks input listener ── */
-  const input = document.getElementById('cat1-input');
-  const errorEl = document.getElementById('cat1-error');
+[
+  {
+    id: 'cat1-studentMarks',
+    max: 7
+  },
+
+  {
+    id: 'cat1-ictMarks',
+    max: 7
+  },
+
+  {
+    id: 'cat1-bestPracticeMarks',
+    max: 6
+  }
+].forEach(field => {
+
+  const input =
+    document.getElementById(field.id);
 
   input.addEventListener('input', () => {
-    const val = parseInt(input.value);
-    const invalid = isNaN(val) || val < 0 || val > 20;
-    input.classList.toggle('invalid', invalid);
-    errorEl.classList.toggle('hidden', !invalid || input.value === '');
-    if (!invalid) updateTotals();
-    else {
-      // reset total contribution for cat1
-      document.getElementById('sum-cat1').textContent  = '0 / 20';
-      const c2 = parseInt(document.getElementById('cat2-score').dataset.score) || 0;
-      const c3 = parseInt(document.getElementById('cat3-score').dataset.score) || 0;
-      document.getElementById('sum-total').textContent = `${c2 + c3} / 100`;
-      document.getElementById('totalScore').textContent = c2 + c3;
-    }
-  });
 
+    const val = parseInt(input.value);
+
+    const invalid =
+      isNaN(val) ||
+      val < 0 ||
+      val > field.max;
+
+    input.classList.toggle(
+      'invalid',
+      invalid
+    );
+
+    updateTotals();
+  });
+});
   /* ── Category 2: auto ── */
   const { score: cat2Score, breakdown: cat2Breakdown } = calcCategory(candidate.category2, CAT2_RULES, CAT2_MAX);
   renderMetricsList('cat2-metrics', cat2Breakdown);
@@ -205,8 +265,25 @@ function init() {
    6.  SUBMIT
 ───────────────────────────────────────────────────────────── */
 function submitReview() {
-  const input  = document.getElementById('cat1-input');
-  const val    = parseInt(input.value);
+const studentMarks =
+  parseInt(
+    document.getElementById('cat1-studentMarks').value
+  ) || 0;
+
+const ictMarks =
+  parseInt(
+    document.getElementById('cat1-ictMarks').value
+  ) || 0;
+
+const bestPracticeMarks =
+  parseInt(
+    document.getElementById('cat1-bestPracticeMarks').value
+  ) || 0;
+
+const val =
+  studentMarks +
+  ictMarks +
+  bestPracticeMarks;
 
   /* Validate cat1 input */
   if (isNaN(val) || val < 0 || val > 20) {
