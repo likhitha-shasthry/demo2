@@ -14,8 +14,13 @@ if (isset($_POST['final_submit'])) {
     $cat1 = $_SESSION['cat1'];
     $cat2 = $_SESSION['cat2'];
     $cat3 = $_SESSION['cat3'];
+    $applicant_id = $_SESSION['applicant_id'];
 
-    $sql = "INSERT INTO candidate_kpi (
+   $applicant_id = $_SESSION['applicant_id'];
+
+$sql = "INSERT INTO candidate_kpi (
+
+    applicant_id,
 
     student_centric_learning,
     ict_tools_usage,
@@ -41,6 +46,8 @@ if (isset($_POST['final_submit'])) {
     copyright_work
 
 ) VALUES (
+
+    '$applicant_id',
 
     '{$cat1['student_centric']}',
     '{$cat1['ict_tools']}',
