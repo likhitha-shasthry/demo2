@@ -128,7 +128,7 @@
         <div class="download-section">
           <h3>Download Application Summary</h3>
           <button type="button" class="btn btn-download" id="download-pdf">
-            📥 Download as PDF
+             Download as PDF
           </button>
         </div>
 
@@ -161,8 +161,97 @@
       </div>
     </section>
   </main>
-
   
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="final.js"></script>
+<div id="pdf-report" style="display:none">
+  <div class="pdf-page">
+
+    <h1>Faculty Appraisal Report</h1>
+
+    <h3>Category 1 — Teaching & Learning Excellence</h3>
+
+    <table>
+      <tr>
+        <th>Aspect</th>
+        <th>Details</th>
+      </tr>
+
+      <tr>
+        <td>Student Centric Learning</td>
+        <td id="pdf-c1-student"></td>
+      </tr>
+
+      <tr>
+        <td>ICT Tools Usage</td>
+        <td id="pdf-c1-ict"></td>
+      </tr>
+
+      <tr>
+        <td>Best Practice</td>
+        <td id="pdf-c1-best"></td>
+      </tr>
+    </table>
+
+    <h3>Category 2 — Professional Development</h3>
+
+    <table>
+      <tr>
+        <th>Activity</th>
+        <th>Value</th>
+      </tr>
+
+      <tr>
+        <td>FDP / Workshop</td>
+        <td id="pdf-c2-fdp"></td>
+      </tr>
+
+      <tr>
+        <td>MOOC Courses</td>
+        <td id="pdf-c2-mooc"></td>
+      </tr>
+
+      <tr>
+        <td>Portfolio / Event</td>
+        <td id="pdf-c2-portfolio"></td>
+      </tr>
+    </table>
+
+    <h3>Category 3 — Research & Innovation</h3>
+
+    <table>
+      <tr>
+        <th>Activity</th>
+        <th>Value</th>
+      </tr>
+
+      <tr>
+        <td>Journal Publications</td>
+        <td id="pdf-c3-journal"></td>
+      </tr>
+
+      <tr>
+        <td>Books / Chapters</td>
+        <td id="pdf-c3-books"></td>
+      </tr>
+
+      <tr>
+        <td>Sponsored Projects</td>
+        <td id="pdf-c3-sponsored"></td>
+      </tr>
+
+      <tr>
+        <td>Patents</td>
+        <td id="pdf-c3-patents"></td>
+      </tr>
+    </table>
+
+  </div>
+
+</div>
+
+
 </body>
 
 </html>
