@@ -64,12 +64,14 @@ body {
   gap: 1.5rem;
 }
 
-.input-group {
+.input-group,
+.field-row {
   display: grid;
   gap: 0.6rem;
 }
 
-.input-group label {
+.input-group label,
+.field-row label {
   font-weight: 600;
   font-size: 0.92rem;
   color: #0f172a;

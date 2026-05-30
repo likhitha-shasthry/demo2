@@ -1,13 +1,16 @@
 <?php
 session_start();
+include("db.php");
+
+$query = mysqli_query($conn, "SELECT * FROM parameters WHERE category_id = 1 ORDER BY parameter_id ASC");
+$category1 = [];
+
+while ($row = mysqli_fetch_assoc($query)) {
+    $category1[] = $row;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $_SESSION['cat1'] = [
-        'student_centric' => $_POST['student_centric'],
-        'ict_tools' => $_POST['ict_tools'],
-        'best_practice' => $_POST['best_practice']
-    ];
+    $_SESSION['cat1'] = $_POST;
 
     header("Location: cat2.php");
     exit();
@@ -19,41 +22,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Category 1 — Candidate Details</title>
+  <title>Category 1 - Candidate Details</title>
   <link rel="stylesheet" href="cat1.css" />
 </head>
 
 <body>
   <main class="page-shell">
     <section class="page-header">
-      <h1>Category 1 — Candidate Details</h1>
+      <h1>Category 1 - Candidate Details</h1>
       <p>Provide long descriptive responses for each field below.</p>
     </section>
 
     <section class="page-body">
       <form class="portal-form category-form" id="category1-form" method="POST">
-        <div class="input-group">
-          <label for="c1-student-centric">Student Centric Learning - 10 Marks</label>
-          <textarea name="student_centric" id="c1-student-centric" rows="4" required
-            placeholder="Describe your student-centric learning strategies, examples, and outcomes..."></textarea>
-        </div>
+        <?php foreach ($category1 as $field) { ?>
+          <div class="field-row">
+            <label>
+              <?php echo htmlspecialchars($field['parameter_name'], ENT_QUOTES, 'UTF-8'); ?>
+              <?php if (!empty($field['max_marks'])) { ?>
+                - <?php echo (int) $field['max_marks']; ?> Marks
+              <?php } ?>
+            </label>
 
-        <div class="input-group">
-          <label for="c1-ict-tools">ICT Tools Usage - 10 Marks</label>
-          <textarea name="ict_tools" id="c1-ict-tools" rows="4" required
-            placeholder="Describe the ICT tools you use and how they support teaching, learning, or research..."></textarea>
-        </div>
-
-        <div class="input-group">
-          <label for="c1-best-practice">Best Practice - 10 Marks</label>
-          <textarea name="best_practice" id="c1-best-practice" rows="4" required
-            placeholder="Describe a best practice you implemented, the process, and its impact..."></textarea>
-        </div>
+            <textarea name="current[<?php echo htmlspecialchars($field['parameter_name'], ENT_QUOTES, 'UTF-8'); ?>]"
+                      rows="4"
+                      required
+                      placeholder="Enter details"><?php echo htmlspecialchars($_SESSION['cat1'][$field['parameter_name']]['current'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+          </div>
+        <?php } ?>
 
         <div class="button-row">
           <button type="button" class="btn btn-edit">Edit</button>
           <button type="submit" class="btn btn-submit">Save and Next</button>
-        
         </div>
       </form>
     </section>

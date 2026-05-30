@@ -287,3 +287,20 @@ body {
   .button-row { flex-direction: column; }
   .btn-submit { flex: none; }
 }
+@media print {
+
+    .download-section,
+    .button-row,
+    .confirmation-section {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .submission-container {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}

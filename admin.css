@@ -122,3 +122,19 @@ body {
 @media (max-width: 720px) {
   .admin-grid { grid-template-columns: 1fr; }
 }
+
+.parameter-btn{
+    display:inline-block;
+    padding:14px 22px;
+    background:#2563eb;
+    color:#fff;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:600;
+    transition:0.3s;
+    margin-bottom:20px;
+}
+
+.parameter-btn:hover{
+    background:#1d4ed8;
+}

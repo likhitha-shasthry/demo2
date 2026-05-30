@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include("db.php");
 
 if(!isset($_SESSION['email']))
@@ -14,29 +15,142 @@ if(isset($_POST['submit']))
 {
     $email = $_SESSION['email'];
 
-    $full_name = $_POST['full_name'];
-    $phone_number = $_POST['phone_number'];
-    $degree_course = $_POST['degree_course'];
-    $branch = $_POST['branch_specialization'];
-    $board = $_POST['university_board'];
-    $year = $_POST['year_of_passing'];
-    $class = $_POST['class_obtained'];
-    $percentage = $_POST['percentage'];
-    $role = $_POST['role'];
+    $applicant = [
+        'full_name' => $_POST['full_name'],
+        'phone_number' => $_POST['phone_number'],
+        'email' => $email,
+        'applicant_family' => $_POST['fam'],
+        'permanent_address' => $_POST['permanent_address'],
+        'present_address' => $_POST['present_address'],
+        'age' => $_POST['age'],
+        'dob' => $_POST['dob'],
+        'nationality' => $_POST['nationality'],
+        'religion' => $_POST['religion'],
+        'sex' => $_POST['sex'],
+        'caste' => $_POST['caste'],
+        'marital_status' => $_POST['marital_status'],
+        'degree_course' => $_POST['degree_course'],
+        'branch_specialization' => $_POST['branch_specialization'],
+        'university_board' => $_POST['university_board'],
+        'year_of_passing' => $_POST['year_of_passing'],
+        'class_obtained' => $_POST['class_obtained'],
+        'percentage' => $_POST['percentage'],
+        'role' => $_POST['role']
+    ];
 
-    $sql = "INSERT INTO applicants
-    (full_name, phone_number, email, degree_course,
-     branch_specialization, university_board,
-     year_of_passing, class_obtained, percentage, role)
-    VALUES
-    ('$full_name','$phone_number','$email','$degree_course',
-     '$branch','$board','$year','$class','$percentage','$role')";
+    if (isset($_SESSION['applicant_id'])) {
+        $applicant_id = (int) $_SESSION['applicant_id'];
+        $stmt = mysqli_prepare($conn, "UPDATE applicants
+            SET full_name = ?,
+                phone_number = ?,
+                email = ?,
+                fam = ?,
+                `Permanent Address` = ?,
+                `Present Address` = ?,
+                Age = ?,
+                DOB = ?,
+                Nationality = ?,
+                Religion = ?,
+                Sex = ?,
+                Caste = ?,
+                `Marital Status` = ?,
+                degree_course = ?,
+                branch_specialization = ?,
+                university_board = ?,
+                year_of_passing = ?,
+                class_obtained = ?,
+                percentage = ?,
+                role = ?
+            WHERE applicant_id = ?");
 
-    mysqli_query($conn, $sql) or die(mysqli_error($conn));
-    $_SESSION['applicant_id'] = mysqli_insert_id($conn);
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssssssisssssssssisdsi",
+            $applicant['full_name'],
+            $applicant['phone_number'],
+            $applicant['email'],
+            $applicant['applicant_family'],
+            $applicant['permanent_address'],
+            $applicant['present_address'],
+            $applicant['age'],
+            $applicant['dob'],
+            $applicant['nationality'],
+            $applicant['religion'],
+            $applicant['sex'],
+            $applicant['caste'],
+            $applicant['marital_status'],
+            $applicant['degree_course'],
+            $applicant['branch_specialization'],
+            $applicant['university_board'],
+            $applicant['year_of_passing'],
+            $applicant['class_obtained'],
+            $applicant['percentage'],
+            $applicant['role'],
+            $applicant_id
+        );
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    } else {
+        $stmt = mysqli_prepare($conn, "INSERT INTO applicants
+            (
+                full_name,
+                phone_number,
+                email,
+                fam,
+                `Permanent Address`,
+                `Present Address`,
+                Age,
+                DOB,
+                Nationality,
+                Religion,
+                Sex,
+                Caste,
+                `Marital Status`,
+                degree_course,
+                branch_specialization,
+                university_board,
+                year_of_passing,
+                class_obtained,
+                percentage,
+                role
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssssssisssssssssisds",
+            $applicant['full_name'],
+            $applicant['phone_number'],
+            $applicant['email'],
+            $applicant['applicant_family'],
+            $applicant['permanent_address'],
+            $applicant['present_address'],
+            $applicant['age'],
+            $applicant['dob'],
+            $applicant['nationality'],
+            $applicant['religion'],
+            $applicant['sex'],
+            $applicant['caste'],
+            $applicant['marital_status'],
+            $applicant['degree_course'],
+            $applicant['branch_specialization'],
+            $applicant['university_board'],
+            $applicant['year_of_passing'],
+            $applicant['class_obtained'],
+            $applicant['percentage'],
+            $applicant['role']
+        );
+        mysqli_stmt_execute($stmt);
+        $applicant_id = mysqli_insert_id($conn);
+        mysqli_stmt_close($stmt);
+
+        $_SESSION['applicant_id'] = $applicant_id;
+    }
+
+    $_SESSION['applicant'] = $applicant;
 
   echo "<script>
-alert('Application submitted successfully');
+alert('Applicant information saved');
 window.location.href='cat1.php';
 </script>";
 exit();
@@ -539,6 +653,139 @@ body{
              required>
 
     </div>
+     <div class="input-group">
+
+      <label>
+        Name and Occupation of Father/Spouse
+      </label>
+
+      <input type="text"
+             name="fam"
+             placeholder="Name and Occupation of Father/Spouse"
+             required>
+
+    </div>
+
+     <div class="input-group">
+
+      <label>
+        Permanent Address 
+      </label>
+
+      <input type="text"
+             name="permanent_address"
+             placeholder="Permanent Address "
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+        Present Address
+      </label>
+
+      <input type="text"
+             name="present_address"
+             placeholder="Present Address"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+        Age
+      </label>
+
+      <input type="text"
+             name="age"
+             placeholder="Age"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+      Date of Birth
+      </label>
+
+      <input type="text"
+             name="dob"
+             placeholder="Date of Birth"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+       Nationality
+      </label>
+
+      <input type="text"
+             name="nationality"
+             placeholder="Nationality"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+       Religion
+      </label>
+
+      <input type="text"
+             name="religion"
+             placeholder="Religion"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+        Sex
+      </label>
+
+      <input type="text"
+             name="sex"
+             placeholder="Sex"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+       Caste & Sub-caste / Group
+      </label>
+
+      <input type="text"
+             name="caste"
+             placeholder="Caste & Sub-caste / Group"
+             required>
+
+    </div>
+     <div class="input-group">
+
+      <label>
+       Marital Status
+      </label>
+
+      <input type="text"
+             name="marital_status"
+             placeholder="Marital Status"
+             required>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    
 
     <div class="input-group">
 

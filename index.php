@@ -44,34 +44,44 @@ if(isset($_POST['register']))
 ========================= */
 if(isset($_POST['login']))
 {
-    $email = mysqli_real_escape_string($conn, $_POST['login_email']);
-    $password = mysqli_real_escape_string($conn, $_POST['login_password']);
+    
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+
+    // Admin Login
+    if($email == "admin@gssedu.in" && $password == "admin123")
+    {
+        $_SESSION['admin'] = true;
+
+        header("Location: admin.php");
+        exit();
+    }
 
     $query = mysqli_query($conn,
         "SELECT * FROM users WHERE email='$email'");
 
     if(mysqli_num_rows($query) > 0)
+{
+    $row = mysqli_fetch_assoc($query);
+
+    if(password_verify($password, $row['password']))
     {
-        $row = mysqli_fetch_assoc($query);
+        unset($_SESSION['admin']);
+        $_SESSION['email'] = $row['email'];
 
-        if(password_verify($password, $row['password']))
-        {
-            // ✅ STORE EMAIL IN SESSION
-            $_SESSION['email'] = $row['email'];
-
-            // ✅ REDIRECT
-            header("Location: applicant.php");
-            exit();
-        }
-        else
-        {
-            $message = "Incorrect password!";
-        }
+        header("Location: applicant.php");
+        exit();
     }
     else
     {
-        $message = "Account not found!";
+        $message = "Incorrect password!";
     }
+}
+else
+{
+    $message = "Account not found!";
+}
+   
 }
 ?>
 
@@ -463,7 +473,7 @@ body{
                     <label>Email Address</label>
 
                     <input type="email"
-                           name="login_email"
+                           name="email"
                            required>
                 </div>
 
@@ -471,16 +481,14 @@ body{
                     <label>Password</label>
 
                     <input type="password"
-                           name="login_password"
+                           name="password"
                            required>
                 </div>
 
-                <button type="submit"
-                        name="login"
-                        class="btn">
-
-                    Sign In
-                </button>
+                <input type="submit"
+       name="login"
+       value="Login"
+       class="btn">
 
                 <div class="footer-text">
                     New applicant?

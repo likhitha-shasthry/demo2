@@ -30,6 +30,9 @@ Admin Dashboard
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 
+<link rel="stylesheet"
+      href="admin.css">
+
 <style>
 
 *{
@@ -113,6 +116,16 @@ body{
 
 }
 
+.top-actions{
+
+    display:flex;
+
+    gap:14px;
+
+    align-items:center;
+
+}
+
 .dashboard-card{
 
     background:rgba(255,255,255,0.1);
@@ -180,6 +193,8 @@ table td{
 
 .view-btn{
 
+    display:inline-block;
+
     text-decoration:none;
 
     background:#2563eb;
@@ -193,6 +208,8 @@ table td{
     font-size:14px;
 
     font-weight:600;
+
+    white-space:nowrap;
 
     transition:0.3s;
 
@@ -213,6 +230,26 @@ table td{
     color:#dbeafe;
 
     font-size:18px;
+
+}
+
+.applicant-table{
+
+    width:100%;
+
+    table-layout:auto;
+
+}
+
+.applicant-table td{
+
+    white-space:nowrap;
+
+}
+
+.applicant-table td:last-child{
+
+    min-width:130px;
 
 }
 
@@ -264,12 +301,23 @@ table td{
 
         </div>
 
-        <a href="logout.php"
-           class="logout-btn">
+        <div class="top-actions">
 
-           Logout
+            <a href="parameters.php"
+               class="parameter-btn">
 
-        </a>
+                Manage Parameters
+
+            </a>
+
+            <a href="index.php"
+               class="logout-btn">
+
+               Logout
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -281,7 +329,7 @@ table td{
 
         <div class="table-wrapper">
 
-        <table>
+        <table class="applicant-table">
 
             <tr>
 
@@ -331,7 +379,7 @@ table td{
 
                 <td>
 
-                    <a href="admin-review.php?id=<?php echo $row['applicant_id']; ?>"
+                    <a href="admin-review.php?id=<?php echo (int) $row['applicant_id']; ?>"
                        class="view-btn">
 
                        View Details
