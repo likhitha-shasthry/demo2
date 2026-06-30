@@ -243,6 +243,8 @@ foreach ($responses_by_category as $category_id => $responses) {
 $total_score = $category_totals[1] + $category_totals[2] + $category_totals[3];
 $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
 
+$grand_total = $total_score + $total_pp;
+
 ?>
 
 <!DOCTYPE html>
@@ -276,11 +278,30 @@ $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
 
       body {
           background: white !important;
+          color: black !important;
       }
 
       .page-wrap {
           margin: 0;
           padding: 0;
+      }
+
+      .cat-card,
+      .candidate-hero,
+      .summary-bar {
+          box-shadow: none !important;
+          border: 1px solid #ccc !important;
+          page-break-inside: avoid;
+      }
+
+      input {
+          border: none !important;
+          background: none !important;
+      }
+
+      .marks-input {
+          border: none !important;
+          width: 50px;
       }
   }
   </style>
@@ -314,12 +335,25 @@ $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
 
       </button>
 
-      <button class="back-btn"
-              onclick="window.print()">
+     
 
-        Download / Print PDF
+      <a href="faculty-sign-report.php?id=<?php echo $id; ?>"
+         target="_blank"
+         class="back-btn"
+         style="text-decoration:none;display:inline-flex;align-items:center;">
 
-      </button>
+        Download For Faculty Sign
+
+      </a>
+
+      <a href="faculty-report.php?id=<?php echo $id; ?>"
+         target="_blank"
+         class="back-btn"
+         style="text-decoration:none;display:inline-flex;align-items:center;">
+
+        Download For Admin Use
+
+      </a>
 
     </div>
 
@@ -362,7 +396,7 @@ $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
       <div class="score-badge">
 
         <span class="score-num">
-          <?php echo $total_score; ?>
+          <?php echo $grand_total; ?>
         </span>
 
         <span class="score-label">
@@ -578,7 +612,7 @@ $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
       Save Scores
     </button>
 
-    
+
 
   </div>
 
@@ -586,8 +620,6 @@ $total_pp = $category_pp[1] + $category_pp[2] + $category_pp[3];
 
 </main>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>

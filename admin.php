@@ -301,25 +301,126 @@ table td{
 
         </div>
 
+
         <div class="top-actions">
 
-            <a href="parameters.php"
-               class="parameter-btn">
+    <a href="add_user.php"
+       class="parameter-btn">
 
-                Manage Parameters
+        Add User
 
-            </a>
+    </a>
 
-            <a href="index.php"
-               class="logout-btn">
+    <a href="parameters.php"
+       class="parameter-btn">
 
-               Logout
+        Manage Parameters
 
-            </a>
+    </a>
+
+    <a href="index.php"
+       class="logout-btn">
+
+       Logout
+
+    </a>
+
+</div>
+
+    </div>
+    <!-- ADD USERS SECTION -->
+
+<div class="dashboard-card">
+
+    <div class="table-title">
+        Add Users
+    </div>
+
+    <form action="send_invite.php" method="POST">
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <tr>
+
+                    <th>Select</th>
+
+                    <th>Sl No</th>
+
+                    <th>Email</th>
+
+                    <th>Password</th>
+
+                </tr>
+
+                <?php
+
+                $user_query = mysqli_query(
+                    $conn,
+                    "SELECT id,
+                            email,
+                            password
+                     FROM users
+                     ORDER BY id DESC"
+                );
+                $slno = 1;
+                while($user = mysqli_fetch_assoc($user_query))
+                {
+?>
+
+<tr>
+
+    <td>
+
+        <input type="checkbox"
+               name="selected_users[]"
+               value="<?php echo $user['id']; ?>">
+
+    </td>
+
+    <td>
+
+        <?php echo $slno++; ?>
+
+    </td>
+
+
+    <td>
+
+        <?php echo $user['email']; ?>
+    </td>
+    <td>
+
+        <?php echo $user['password']; ?>
+    </td>
+
+
+</tr>
+
+<?php
+}
+?>
+
+            </table>
+
+        </div>
+        <div style="margin-top:20px;">
+
+            <button type="submit"
+                    class="invite-btn">
+
+                Send Invite
+
+            </button>
 
         </div>
 
-    </div>
+        
+
+    </form>
+
+</div>
 
     <div class="dashboard-card">
 

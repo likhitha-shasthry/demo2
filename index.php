@@ -22,11 +22,9 @@ if(isset($_POST['register']))
     }
     else
     {
-        $hashed = password_hash($password, PASSWORD_DEFAULT);
-
         $insert = mysqli_query($conn,
-            "INSERT INTO users(email,password)
-             VALUES('$email','$hashed')");
+"INSERT INTO users(email,password)
+ VALUES('$email','$password')");
 
         if($insert)
         {
@@ -64,14 +62,16 @@ if(isset($_POST['login']))
 {
     $row = mysqli_fetch_assoc($query);
 
-    if(password_verify($password, $row['password']))
-    {
-        unset($_SESSION['admin']);
-        $_SESSION['email'] = $row['email'];
+    if($password == $row['password'])
+{
+    unset($_SESSION['admin']);
+    $_SESSION['user'] = $row['email'];
+    $_SESSION['user_id'] = $row['id'];
+     $_SESSION['email'] = $row['email'];
 
-        header("Location: applicant.php");
-        exit();
-    }
+    header("Location: applicant.php");
+    exit();
+}
     else
     {
         $message = "Incorrect password!";

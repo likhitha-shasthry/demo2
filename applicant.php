@@ -13,7 +13,49 @@ $email = $_SESSION['email'];
 
 if(isset($_POST['submit']))
 {
-    $email = $_SESSION['email'];
+    function db_err($conn, $label) {
+        die("<pre style='color:red'>DB ERROR [$label]: " . mysqli_error($conn) . "</pre>");
+    }
+
+    $photo_path = $_SESSION['applicant']['photo'] ?? "";
+
+    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == 0)
+    {
+        $upload_dir = "uploads/";
+
+        if(!file_exists($upload_dir))
+        {
+            mkdir($upload_dir,0777,true);
+        }
+
+        $file_name = time() . "_" . basename($_FILES['photo']['name']);
+        $target_file = $upload_dir . $file_name;
+
+        if(move_uploaded_file($_FILES['photo']['tmp_name'], $target_file))
+        {
+            $photo_path = $target_file;
+        }
+    }
+
+    $degrees      = $_POST['degree_course'] ?? [];
+    $branches     = $_POST['branch_specialization'] ?? [];
+    $universities = $_POST['university_board'] ?? [];
+    $years        = $_POST['year_of_passing'] ?? [];
+    $percentages  = $_POST['percentage'] ?? [];
+
+    $education = [];
+    for($i = 0; $i < count($degrees); $i++)
+    {
+        $education[] = [
+            "degree_course" => $degrees[$i] ?? "",
+            "branch_specialization" => $branches[$i] ?? "",
+            "university_board" => $universities[$i] ?? "",
+            "year_of_passing" => $years[$i] ?? "",
+            "percentage" => $percentages[$i] ?? ""
+        ];
+    }
+
+    $education_json = json_encode($education);
 
     $applicant = [
         'full_name' => $_POST['full_name'],
@@ -22,20 +64,16 @@ if(isset($_POST['submit']))
         'applicant_family' => $_POST['fam'],
         'permanent_address' => $_POST['permanent_address'],
         'present_address' => $_POST['present_address'],
-        'age' => $_POST['age'],
+        'age' => (int) $_POST['age'],
         'dob' => $_POST['dob'],
         'nationality' => $_POST['nationality'],
         'religion' => $_POST['religion'],
         'sex' => $_POST['sex'],
         'caste' => $_POST['caste'],
         'marital_status' => $_POST['marital_status'],
-        'degree_course' => $_POST['degree_course'],
-        'branch_specialization' => $_POST['branch_specialization'],
-        'university_board' => $_POST['university_board'],
-        'year_of_passing' => $_POST['year_of_passing'],
-        'class_obtained' => $_POST['class_obtained'],
-        'percentage' => $_POST['percentage'],
-        'role' => $_POST['role']
+        'role' => $_POST['role'],
+        'photo' => $photo_path,
+        'education_json' => $education_json
     ];
 
     if (isset($_SESSION['applicant_id'])) {
@@ -54,18 +92,15 @@ if(isset($_POST['submit']))
                 Sex = ?,
                 Caste = ?,
                 `Marital Status` = ?,
-                degree_course = ?,
-                branch_specialization = ?,
-                university_board = ?,
-                year_of_passing = ?,
-                class_obtained = ?,
-                percentage = ?,
-                role = ?
+                role = ?,
+                photo = ?,
+                education_json = ?
             WHERE applicant_id = ?");
+        if(!$stmt) db_err($conn, 'UPDATE prepare');
 
         mysqli_stmt_bind_param(
             $stmt,
-            "ssssssisssssssssisdsi",
+            "ssssssisssssssssi",
             $applicant['full_name'],
             $applicant['phone_number'],
             $applicant['email'],
@@ -79,16 +114,12 @@ if(isset($_POST['submit']))
             $applicant['sex'],
             $applicant['caste'],
             $applicant['marital_status'],
-            $applicant['degree_course'],
-            $applicant['branch_specialization'],
-            $applicant['university_board'],
-            $applicant['year_of_passing'],
-            $applicant['class_obtained'],
-            $applicant['percentage'],
             $applicant['role'],
+            $applicant['photo'],
+            $applicant['education_json'],
             $applicant_id
         );
-        mysqli_stmt_execute($stmt);
+        if(!mysqli_stmt_execute($stmt)) db_err($conn, 'UPDATE execute');
         mysqli_stmt_close($stmt);
     } else {
         $stmt = mysqli_prepare($conn, "INSERT INTO applicants
@@ -106,19 +137,16 @@ if(isset($_POST['submit']))
                 Sex,
                 Caste,
                 `Marital Status`,
-                degree_course,
-                branch_specialization,
-                university_board,
-                year_of_passing,
-                class_obtained,
-                percentage,
-                role
+                role,
+                photo,
+                education_json
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        if(!$stmt) db_err($conn, 'INSERT prepare');
 
         mysqli_stmt_bind_param(
             $stmt,
-            "ssssssisssssssssisds",
+            "ssssssisssssssss",
             $applicant['full_name'],
             $applicant['phone_number'],
             $applicant['email'],
@@ -132,15 +160,11 @@ if(isset($_POST['submit']))
             $applicant['sex'],
             $applicant['caste'],
             $applicant['marital_status'],
-            $applicant['degree_course'],
-            $applicant['branch_specialization'],
-            $applicant['university_board'],
-            $applicant['year_of_passing'],
-            $applicant['class_obtained'],
-            $applicant['percentage'],
-            $applicant['role']
+            $applicant['role'],
+            $applicant['photo'],
+            $applicant['education_json']
         );
-        mysqli_stmt_execute($stmt);
+        if(!mysqli_stmt_execute($stmt)) db_err($conn, 'INSERT execute');
         $applicant_id = mysqli_insert_id($conn);
         mysqli_stmt_close($stmt);
 
@@ -149,11 +173,11 @@ if(isset($_POST['submit']))
 
     $_SESSION['applicant'] = $applicant;
 
-  echo "<script>
+    echo "<script>
 alert('Applicant information saved');
 window.location.href='cat1.php';
 </script>";
-exit();
+    exit();
 }
 ?>
 
@@ -566,6 +590,107 @@ body{
 </head>
 
 <body>
+  <script>
+
+function syncPercentage(row)
+{
+    let cls = row.querySelector(".cls").value;
+    let pct = row.querySelector(".pct").value;
+
+    row.querySelector(".combined").value =
+        cls + " - " + pct;
+}
+
+function addRow()
+{
+    let tr = document.createElement("tr");
+
+    tr.innerHTML = `
+
+<td>
+<input type="text"
+       name="degree_course[]"
+       required>
+</td>
+
+<td>
+<input type="text"
+       name="branch_specialization[]"
+       required>
+</td>
+
+<td>
+<input type="text"
+       name="university_board[]"
+       required>
+</td>
+
+<td>
+<input type="number"
+       name="year_of_passing[]"
+       required>
+</td>
+
+<td>
+
+<div class="pct-cell">
+
+<select class="cls"
+        onchange="syncPercentage(this.closest('tr'))">
+
+<option value="">Class</option>
+<option value="Distinction">Distinction</option>
+<option value="First Class">First Class</option>
+<option value="Second Class">Second Class</option>
+<option value="Pass Class">Pass Class</option>
+
+</select>
+
+<input type="number"
+       step="0.01"
+       class="pct"
+       placeholder="%"
+       oninput="syncPercentage(this.closest('tr'))">
+
+</div>
+
+<input type="hidden"
+       class="combined"
+       name="percentage[]">
+
+</td>
+
+<td>
+
+<button type="button"
+        class="rm-btn"
+        onclick="removeRow(this)">
+Remove
+</button>
+
+</td>
+`;
+
+document.getElementById("edu-body")
+        .appendChild(tr);
+}
+
+function removeRow(btn)
+{
+    let tbody = document.getElementById("edu-body");
+
+    if(tbody.rows.length > 1)
+    {
+        btn.closest("tr").remove();
+    }
+}
+
+window.onload = function()
+{
+    addRow();
+};
+
+</script>
 
 <div class="container">
 
@@ -618,13 +743,24 @@ body{
 
     </div>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
   <!-- PERSONAL INFO -->
+   <div class="input-group">
+
+    <label>Upload Photo</label>
+
+    <input type="file"
+           name="photo"
+           accept="image/*"
+           required>
+
+</div>
 
   <div class="section-title">
     Personal Information
   </div>
+  
 
   <div class="form-grid">
 
@@ -696,7 +832,7 @@ body{
         Age
       </label>
 
-      <input type="text"
+      <input type="number"
              name="age"
              placeholder="Age"
              required>
@@ -708,9 +844,8 @@ body{
       Date of Birth
       </label>
 
-      <input type="text"
+      <input type="date"
              name="dob"
-             placeholder="Date of Birth"
              required>
 
     </div>
@@ -744,10 +879,23 @@ body{
         Sex
       </label>
 
-      <input type="text"
-             name="sex"
-             placeholder="Sex"
-             required>
+      <select name="sex" required>
+
+<option value="">Select</option>
+
+<option value="Male">
+Male
+</option>
+
+<option value="Female">
+Female
+</option>
+
+<option value="Other">
+Other
+</option>
+
+</select>
 
     </div>
      <div class="input-group">
@@ -768,10 +916,27 @@ body{
        Marital Status
       </label>
 
-      <input type="text"
-             name="marital_status"
-             placeholder="Marital Status"
-             required>
+      <select name="marital_status" required>
+
+<option value="">Select</option>
+
+<option value="Single">
+Single
+</option>
+
+<option value="Married">
+Married
+</option>
+
+<option value="Divorced">
+Divorced
+</option>
+
+<option value="Widowed">
+Widowed
+</option>
+
+</select>
 
     </div>
 
@@ -804,103 +969,37 @@ body{
 
   <!-- EDUCATIONAL INFO -->
 
+  
+
   <div class="section-title">
-    Educational Information
-  </div>
+    Educational Qualifications
+</div>
 
-  <div class="form-grid">
+<div class="edu-wrap">
+<table class="edu">
 
-    <div class="input-group">
+<thead>
+<tr>
+    <th>Degree / Course</th>
+    <th>Branch / Specialization</th>
+    <th>University / Board</th>
+    <th>Year of Passing</th>
+    <th>Class & % / CGPA</th>
+    <th>Action</th>
+</tr>
+</thead>
 
-      <label>
-        Degree Course
-      </label>
+<tbody id="edu-body">
+</tbody>
 
-      <input type="text"
-             name="degree_course"
-             placeholder="Enter Degree Course"
-             required>
+</table>
+</div>
 
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        Branch / Specialization
-      </label>
-
-      <input type="text"
-             name="branch_specialization"
-             placeholder="Enter Branch"
-             required>
-
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        University / Board
-      </label>
-
-      <input type="text"
-             name="university_board"
-             placeholder="Enter University / Board"
-             required>
-
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        Year of Passing
-      </label>
-
-      <input type="number"
-             name="year_of_passing"
-             placeholder="Enter Passing Year"
-             required>
-
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        Class Obtained
-      </label>
-
-      <input type="text"
-             name="class_obtained"
-             placeholder="First Class / Distinction"
-             required>
-
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        Percentage / CGPA
-      </label>
-
-      <input type="number"
-             step="0.01"
-             name="percentage"
-             placeholder="Enter Percentage"
-             required>
-
-    </div>
-
-    <div class="input-group">
-
-      <label>
-        Role Applied For
-      </label>
-
-      <input type="text"
-             name="role"
-             placeholder="Enter Role Applied For"
-             required>
-
-    </div>
+<button type="button"
+        class="add-btn"
+        onclick="addRow()">
+    + Add Another Degree
+</button>
 
   </div>
 

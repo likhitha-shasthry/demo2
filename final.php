@@ -80,6 +80,46 @@ function insert_response($conn, $applicant_id, $category_id, $category_name, $cu
     mysqli_stmt_close($stmt);
 }
 
+function update_applicant_final_details($conn, $applicant_id)
+{
+    $salary_expected = $_POST['salary_expected'] ?? '';
+    $joining_time = $_POST['joining_time'] ?? '';
+    $reference_1 = $_POST['reference_1'] ?? '';
+    $reference_2 = $_POST['reference_2'] ?? '';
+    $additional_information = $_POST['additional_information'] ?? '';
+    $legal_disputes = $_POST['legal_disputes'] ?? '';
+
+    $stmt = mysqli_prepare($conn, "UPDATE applicants
+        SET salary_expected = ?,
+            joining_time = ?,
+            reference_1 = ?,
+            reference_2 = ?,
+            additional_information = ?,
+            legal_disputes = ?
+        WHERE applicant_id = ?");
+    if (!$stmt) {
+        throw new Exception("Final details prepare failed: " . mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssssssi",
+        $salary_expected,
+        $joining_time,
+        $reference_1,
+        $reference_2,
+        $additional_information,
+        $legal_disputes,
+        $applicant_id
+    );
+
+    if (!mysqli_stmt_execute($stmt)) {
+        throw new Exception("Final details save failed: " . mysqli_stmt_error($stmt));
+    }
+
+    mysqli_stmt_close($stmt);
+}
+
 if (isset($_POST['final_submit'])) {
 
     $applicant = $_SESSION['applicant'];
@@ -96,22 +136,28 @@ if (isset($_POST['final_submit'])) {
             $applicant_id = (int) $_SESSION['applicant_id'];
         } else {
             $applicant_stmt = mysqli_prepare($conn, "INSERT INTO applicants
-                (full_name, phone_number, email, degree_course, branch_specialization, university_board, year_of_passing, class_obtained, percentage, role)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                (full_name, phone_number, email, fam, `Permanent Address`, `Present Address`, Age, DOB, Nationality, Religion, Sex, Caste, `Marital Status`, role, photo, education_json)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             mysqli_stmt_bind_param(
                 $applicant_stmt,
-                "ssssssisds",
+                "ssssssisssssssss",
                 $applicant['full_name'],
                 $applicant['phone_number'],
                 $applicant['email'],
-                $applicant['degree_course'],
-                $applicant['branch_specialization'],
-                $applicant['university_board'],
-                $applicant['year_of_passing'],
-                $applicant['class_obtained'],
-                $applicant['percentage'],
-                $applicant['role']
+                $applicant['applicant_family'],
+                $applicant['permanent_address'],
+                $applicant['present_address'],
+                $applicant['age'],
+                $applicant['dob'],
+                $applicant['nationality'],
+                $applicant['religion'],
+                $applicant['sex'],
+                $applicant['caste'],
+                $applicant['marital_status'],
+                $applicant['role'],
+                $applicant['photo'],
+                $applicant['education_json']
             );
             mysqli_stmt_execute($applicant_stmt);
             mysqli_stmt_close($applicant_stmt);
@@ -132,6 +178,8 @@ if (isset($_POST['final_submit'])) {
                 );
             }
         }
+
+        update_applicant_final_details($conn, $applicant_id);
 
         mysqli_commit($conn);
         session_destroy();
@@ -185,6 +233,39 @@ $applicant = $_SESSION['applicant'];
           </div>
         <?php } ?>
 
+        <form method="POST">
+          <div class="category-content final-details">
+            <h3>Additional Final Details</h3>
+
+            <div class="summary-item">
+              <label for="salary_expected">Salary expected if selected for the post applied for</label>
+              <input type="text" id="salary_expected" name="salary_expected" class="final-input">
+            </div>
+
+            <div class="summary-item">
+              <label for="joining_time">Joining time required if selected</label>
+              <input type="text" id="joining_time" name="joining_time" class="final-input">
+            </div>
+
+            <div class="summary-item reference-item">
+              <label>Names and address of two persons in India to whom reference can be made about the applicant's fitness to the post</label>
+              <div class="reference-fields">
+                <textarea name="reference_1" class="final-input" rows="3" placeholder="1."></textarea>
+                <textarea name="reference_2" class="final-input" rows="3" placeholder="2."></textarea>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <label for="additional_information">Additional information of the applicant wishes to furnish, if any</label>
+              <textarea id="additional_information" name="additional_information" class="final-input" rows="3"></textarea>
+            </div>
+
+            <div class="summary-item">
+              <label for="legal_disputes">Are there any legal disputes, professional or personal involving you pending in courts of India or abroad?</label>
+              <textarea id="legal_disputes" name="legal_disputes" class="final-input" rows="3"></textarea>
+            </div>
+          </div>
+
         <div class="download-section">
           <h3>Download Application Summary</h3>
          <button type="button"
@@ -212,7 +293,6 @@ $applicant = $_SESSION['applicant'];
           </div>
         </div>
 
-        <form method="POST">
           <div class="button-row">
             <button type="button" class="btn btn-back" onclick="goBack()">
               Back
@@ -249,6 +329,11 @@ function downloadPDF()
     })
     .from(element)
     .save();
+}
+
+function goBack()
+{
+    window.location.href = "cat3.php";
 }
 </script>
 </body>
