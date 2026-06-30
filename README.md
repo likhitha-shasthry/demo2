@@ -192,6 +192,19 @@ The system automatically computes category-wise scores and generates consolidate
 
 ---
 
+## 👥 Contributors
+
+| Avatar | Contributor | Role |
+|:------:|-------------|------|
+| <img src="https://github.com/likhitha-shasthry.png" width="70" style="border-radius:50%"> | **[Likhitha Shasthry B. S.](https://github.com/likhitha-shasthry)** | 🗄️ Database design, 🔗 backend integration, 📊 report generation, 🚀 deployment, and overall system integration. |
+| <img src="https://github.com/BinduYajman.png" width="70" style="border-radius:50%"> | **[Bindu Yajman](https://github.com/BinduYajman)** | 🎨 Designed and implemented the user interface for the **Application Module**. |
+| <img src="https://github.com/spoorthiumesh-cmyk.png" width="70" style="border-radius:50%"> | **[Spoorthi U](https://github.com/spoorthiumesh-cmyk)** | 🖥️ Designed and implemented the user interface for the **Admin Module**. |
+| <img src="https://github.com/sanikapapanna-cmd.png" width="70" style="border-radius:50%"> | **[Sanika P](https://github.com/sanikapapanna-cmd)** | 📧 Email integration, SMTP configuration, and notification services. |
+| <img src="https://github.com/sinchanamj.png" width="70" style="border-radius:50%"> | **[Sinchana](https://github.com/sinchanamj)** | ✅ Email integration, testing, and email workflow implementation. |
+
+---
+---
+
 ## 👩‍💻 Author
 
 **Likhitha Shasthry**
