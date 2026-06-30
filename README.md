@@ -207,7 +207,7 @@ The system automatically computes category-wise scores and generates consolidate
 
 ## 👩‍💻 Author
 
-**Likhitha Shasthry**
+**Likhitha Shasthry B S**
 
 GitHub: https://github.com/likhitha-shasthry
 
